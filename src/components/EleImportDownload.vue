@@ -45,8 +45,11 @@ export default {
   name: 'EleImportDownload',
   props: {
     filepath: {
-      type: String,
-      required: true
+      type: String
+    },
+    requireDownload: {
+      type: Boolean,
+      default: false
     }
   },
   inject: ['goNext'],
@@ -57,14 +60,19 @@ export default {
   },
   methods: {
     // 点击下载
-    handleDownload () {
+    handleDownload (e) {
+      if (!this.filepath) {
+        e.preventDefault()
+        this.$emit('downloadTemplate')
+        return
+      }
       Cookie.set('ele-import-download-' + this.filepath, true)
       this.hasDownload = true
     },
 
     // 点击下一步
     handleNext () {
-      if (this.hasDownload) {
+      if (!this.requireDownload || this.hasDownload) {
         this.goNext()
       } else {
         this.$message.error('您还未下载模板文件')

@@ -18,6 +18,8 @@
       <!-- 下载模板 -->
       <ele-import-download
         :filepath="filepath"
+        :require-download="requireDownload"
+        @downloadTemplate="downloadTemplate"
         v-if="currentStep === 1"
       />
 
@@ -62,8 +64,11 @@ export default {
   props: {
     // 文件路径
     filepath: {
-      type: String,
-      required: true
+      type: String
+    },
+    requireDownload: {
+      type: Boolean,
+      default: false
     },
     // 请求方法
     requestFn: {
@@ -142,6 +147,9 @@ export default {
       this.tableData = []
       this.columns = []
       this.currentStep = 1
+    },
+    downloadTemplate () {
+      this.$emit('downloadImportTemplate')
     },
     // 关闭
     handlClose () {
